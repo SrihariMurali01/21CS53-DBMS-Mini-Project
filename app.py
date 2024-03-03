@@ -402,5 +402,25 @@ def add_employee():
     return render_template('add_employee.html', dept_names=dept_names, proj_names=proj_names)
 
 
+@app.route('/sql_command', methods=['GET', 'POST'])
+def sql_command():
+    if request.method == 'POST':
+        # Get the SQL command submitted by the manager
+        sql_command = request.form['sql_command']
+
+        try:
+            # Execute the SQL command
+            cursor.execute(sql_command)
+            # Fetch the results, if any
+            results = cursor.fetchall()
+            return render_template('sql_command.html', results=results)
+        except Exception as e:
+            # Handle errors gracefully
+            error_message = str(e)
+            return render_template('sql_command.html', error_message=error_message)
+
+    return render_template('sql_command.html', results=None, error_message=None)
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
