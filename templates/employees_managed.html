@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employees Managed</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .edit-btn {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Employees Managed Page</h2>
+    <!-- Display employees managed by the manager -->
+    <table>
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Action</th> <!-- Add a column for edit action -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in emp_managed %}
+                <tr>
+                    <td>{{ employee[0] }}</td>
+                    <td>{{ employee[1] }}</td>
+                    <td>{{ employee[2] }}</td>
+                    <td><button class="edit-btn" onclick="window.location.href='/edit_employee?emp_id={{ employee[0] }}'">Edit</button></td> <!-- Button to edit page -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

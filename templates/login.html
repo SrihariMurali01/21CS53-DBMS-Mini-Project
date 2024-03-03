@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+</head>
+<body>
+    <div>
+        <h2>Login</h2>
+        {% if request.args.get('x') == 'True' %}
+            <p style="color: red;">Login failed. Please check your email and password.</p>
+        {% endif %}
+        <form action="/authenticate" method="post">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br>
+
+            <button type="submit">Sign In</button>
+        </form>
+        <p>New user? <a href="/signup">Sign up here</a></p>
+    </div>
+</body>
+</html>

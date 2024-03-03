@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Details</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>Department Details</h2>
+    <!-- Display department details as a table -->
+    <table>
+        <tr>
+            <th>Department ID</th>
+            <th>Location</th>
+            <th>Name</th>
+            <th>Manager ID</th>
+            <th>Branch ID</th>
+            <th>Start Date</th>
+        </tr>
+        {% for dept in dept_details %}
+        <tr>
+            <td>{{ dept[0] }}</td>
+            <td>{{ dept[1] }}</td>
+            <td>{{ dept[2] }}</td>
+            <td>{{ dept[3] }}</td>
+            <td>{{ dept[4] }}</td>
+            <td>{{ dept[5] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

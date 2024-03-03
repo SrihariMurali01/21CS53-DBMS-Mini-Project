@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects Managed</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>Projects Managed</h2>
+    <!-- Display projects managed by the employee as a table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Project ID</th>
+                <th>Project Name</th>
+                <th>Status</th>
+                <th>Project Start Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects_managed %}
+            <tr>
+                <td>{{ project[0] }}</td>
+                <td>{{ project[1] }}</td>
+                <td>{{ project[2] }}</td>
+                <td>{{ project[3] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+

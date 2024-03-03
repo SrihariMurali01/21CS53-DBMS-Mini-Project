@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloads</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .add-review-form {
+            display: flex;
+            flex-direction: column;
+        }
+        .add-review-form label {
+            margin-bottom: 5px;
+        }
+        .add-review-form select,
+        .add-review-form textarea,
+        .add-review-form input[type="submit"] {
+            margin-bottom: 10px;
+        }
+        .go-back-btn {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Downloads</h1>
+
+    <table>
+        <tr>
+            <th>Game Name</th>
+            <th>Version</th>
+            <th>Branch</th>
+            <th>Download Link</th>
+            <th>Add Review</th>
+        </tr>
+        {% for game in games %}
+        <tr>
+            <td>{{ game[0] }}</td>
+            <td>{{ game[1] }}</td>
+            <td>{{ game[3] }}</td> <!-- Added column for Branch -->
+            <td><a href="{{ game[2] }}" target="_blank">Download</a></td>
+            <td>
+                <form class="add-review-form" action="/add_review" method="POST">
+                    <input type="hidden" name="game_name" value="{{ game[0] }}">
+                    <input type="hidden" name="user_id" value="{{ user_data }}">
+
+                    <label for="rating">Rating:</label>
+                    <select name="rating" id="rating">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <label for="comment">Comment:</label>
+                    <textarea name="comment" id="comment" cols="30" rows="5"></textarea>
+                    <input type="submit" value="Add Review">
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <button class="go-back-btn" onclick="goBack()">Go Back</button>
+
+    <script>
+        // Function to go back to the previous page
+        function goBack() {
+            window.history.back();
+        }
+
+        // Check if the URL contains a success parameter indicating review addition
+        const urlParams = new URLSearchParams(window.location.search);
+        const success = urlParams.get('success');
+        // If success parameter is present, show an alert
+        if (success === 'true') {
+            alert('Your review was added successfully!');
+        }
+    </script>
+</body>
+</html>
