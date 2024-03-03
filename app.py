@@ -343,15 +343,63 @@ def edit_employee():
     return render_template('edit_employee.html', employee=emp_details)
 
 
-@app.route('/add_employee', methods=['POST'])
+@app.route('/add_employee', methods=['GET', 'POST'])
 def add_employee():
-    # Process form submission to add new employee
-    emp_name = request.form['emp_name']
-    email = request.form['email']
-    # Insert new employee into the database
-    cursor.execute('INSERT INTO employee (emp_name, email) VALUES (%s, %s)', (emp_name, email))
-    conn.commit()
-    return redirect('/employees_managed')
+    if request.method == 'POST':
+        # Retrieve form data
+        emp_id = request.form['emp_id']
+        emp_name = request.form['emp_name']
+        emp_address = request.form['emp_address']
+        emp_age = request.form['emp_age']
+        emp_dob = request.form['emp_dob']
+        emp_sal = request.form['emp_sal']
+        emp_posn = request.form['emp_posn']
+        skills = request.form['skills']
+        email = request.form['email']
+        password = request.form['password']
+        dept_name = request.form['dept_name']  # Retrieve selected department name
+        proj_name = request.form['proj_name']  # Retrieve selected project name
+
+        # Insert new employee into the database
+        cursor.execute(
+            'INSERT INTO employee (emp_id ,emp_name, emp_address, emp_age, emp_dob, '
+            'emp_sal, emp_posn, skills, email, password)'
+            ' VALUES (%s ,%s, %s, %s, %s, %s, %s, %s, %s, %s)',
+            (emp_id, emp_name, emp_address, emp_age, emp_dob, emp_sal, emp_posn, skills, email, password))
+        conn.commit()
+
+        # Retrieve department and project IDs based on the selected names
+        cursor.execute('SELECT dept_id FROM department WHERE dept_name = %s', (dept_name,))
+        dept_id = cursor.fetchone()[0]
+        cursor.execute('SELECT proj_id FROM project WHERE proj_name = %s', (proj_name,))
+        proj_id = cursor.fetchone()[0]
+
+        # Insert employee and department association into emp_dept table
+        cursor.execute('INSERT INTO emp_dept (emp_id, dept_id) VALUES (%s, %s)', (emp_id, dept_id))
+        conn.commit()
+
+        # Insert employee and project association into emp_proj table
+        cursor.execute('INSERT INTO emp_proj (emp_id, proj_id) VALUES (%s, %s)', (emp_id, proj_id))
+        conn.commit()
+
+        cursor.execute(
+            'SELECT d.mgr_id FROM employee e '
+            'JOIN emp_dept ed ON e.emp_id = ed.emp_id '
+            'JOIN department d ON ed.dept_id = d.dept_id '
+            'WHERE e.emp_id = %s', (emp_id,))
+        emp_id = cursor.fetchone()[0]
+        print(emp_id)
+        return redirect(f'/employees_managed?user={emp_id}')
+
+    # Fetch department names for dropdown menu
+    cursor.execute('SELECT dept_name FROM department')
+    dept_names = [row[0] for row in cursor.fetchall()]
+
+    # Fetch project names for dropdown menu
+    cursor.execute('SELECT proj_name FROM project')
+    proj_names = [row[0] for row in cursor.fetchall()]
+
+    return render_template('add_employee.html', dept_names=dept_names, proj_names=proj_names)
 
 
 if __name__ == '__main__':

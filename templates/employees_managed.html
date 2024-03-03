@@ -17,7 +17,7 @@
         th {
             background-color: #f2f2f2;
         }
-        .edit-btn {
+        .edit-btn, .add-btn {
             background-color: #4CAF50; /* Green */
             border: none;
             color: white;
@@ -55,5 +55,7 @@
             {% endfor %}
         </tbody>
     </table>
+    <!-- Button to add new employees -->
+    <button class="add-btn" onclick="window.location.href='/add_employee'">Add Employee</button>
 </body>
 </html>
