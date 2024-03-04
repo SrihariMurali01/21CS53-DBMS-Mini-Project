@@ -86,7 +86,7 @@ def authenticate():
                        'e.emp_sal, e.emp_posn, e.skills, e.email, e.password '
                        'FROM employee e '
                        'WHERE e.email=%s AND e.password=%s', (email, password))
-        emp = cursor.fetchall()[0]
+        emp = cursor.fetchall()
         if emp:
             return redirect(url_for('employee', user_data=emp))
         else:
@@ -249,6 +249,7 @@ def add_review():
         cursor.execute('SELECT game_id FROM game WHERE game_name=%s', (game_name,))
         game_id = cursor.fetchall()[0][0]
 
+        print(game_id)
         # Read review count from file
         review_count = 0
         with open('rev_count.txt', 'r') as f:
@@ -256,26 +257,22 @@ def add_review():
 
         # Generate review ID
         review_id = int(f'{review_count + 100}')
-
+        print(review_id)
         try:
             # Insert review into the database
             cursor.execute('INSERT INTO review (rev_id, rating, comment, rev_date) VALUES (%s, %s, %s, %s)',
                            (review_id, rating, comment, date.today().strftime('%Y-%m-%d')))
-            conn.commit()
             # Update user_game and game_review tables
             cursor.execute('INSERT INTO user_game (user_id, game_id) VALUES (%s, %s)', (user_id, game_id))
             cursor.execute('INSERT INTO game_review (game_id, rev_id) VALUES (%s, %s)', (game_id, review_id))
             conn.commit()
+            with open('rev_count.txt', 'w') as f:
+                f.write(str(review_count + 100))
+            # Redirect back to the downloads page
+            return redirect(url_for('download', user=user_id, success='true'))
         except mysql.connector.errors.IntegrityError:
             conn.rollback()
             return redirect(url_for('download', user=user_id, success='false'))
-
-        # Update review count in the file
-        with open('rev_count.txt', 'w') as f:
-            f.write(str(review_count + 100))
-
-        # Redirect back to the downloads page
-        return redirect(url_for('download', user=user_id, success='true'))
 
 
 # Add the route for the "reviews_added" page
