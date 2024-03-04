@@ -406,11 +406,11 @@ def add_employee():
         return redirect(f'/employees_managed?user={emp_id}')
 
     # Fetch department names for dropdown menu
-    cursor.execute('SELECT dept_name FROM department')
+    cursor.execute('SELECT distinct dept_name FROM department')
     dept_names = [row[0] for row in cursor.fetchall()]
 
     # Fetch project names for dropdown menu
-    cursor.execute('SELECT proj_name FROM project')
+    cursor.execute('SELECT distinct proj_name FROM project')
     proj_names = [row[0] for row in cursor.fetchall()]
 
     return render_template('add_employee.html', dept_names=dept_names, proj_names=proj_names)
