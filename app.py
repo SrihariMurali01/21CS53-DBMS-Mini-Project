@@ -79,20 +79,20 @@ def authenticate():
                            'JOIN department d ON e.emp_id = d.mgr_id '
                            'WHERE e.email=%s AND e.password=%s',
                            (email, password))
-            mgr = cursor.fetchone()
+            mgr = cursor.fetchall()[0]
             return redirect(url_for('manager', user_data=mgr))
 
         cursor.execute('SELECT DISTINCT e.emp_id, e.emp_address, e.emp_name, e.emp_age, e.emp_dob, '
                        'e.emp_sal, e.emp_posn, e.skills, e.email, e.password '
                        'FROM employee e '
                        'WHERE e.email=%s AND e.password=%s', (email, password))
-        emp = cursor.fetchone()
+        emp = cursor.fetchall()[0]
         if emp:
             return redirect(url_for('employee', user_data=emp))
         else:
             # Check user credentials in the users table
             cursor.execute('SELECT * FROM user WHERE email=%s AND password=%s', (email, password))
-            user = cursor.fetchone()
+            user = cursor.fetchall()[0]
             if user:
                 return redirect(url_for('user', user_data=user))
             else:
@@ -107,7 +107,7 @@ def manager():
     # Fetch manager-specific data from the database
     user_data = request.args.get('user_data')
     cursor.execute('SELECT emp_name from employee where emp_id = %s', (user_data,))
-    name = cursor.fetchone()
+    name = cursor.fetchall()[0]
     return render_template('manager.html', user_data=user_data, name=name)
 
 
@@ -116,7 +116,7 @@ def employee():
     # Fetch employee-specific data from the database
     user_data = request.args.get('user_data')
     cursor.execute('SELECT emp_name from employee where emp_id = %s', (user_data,))
-    name = cursor.fetchone()
+    name = cursor.fetchall()[0]
     return render_template('employee.html', user_data=user_data, name=name)
 
 
@@ -125,7 +125,7 @@ def user():
     # Fetch employee-specific data from the database
     user_data = request.args.get('user_data')
     cursor.execute('SELECT user_name from user where user_id = %s', (user_data,))
-    name = cursor.fetchone()
+    name = cursor.fetchall()[0]
     return render_template('user.html', user_data=user_data, name=name)
 
 
@@ -247,7 +247,7 @@ def add_review():
         comment = request.form['comment']
         # Find the game ID
         cursor.execute('SELECT game_id FROM game WHERE game_name=%s', (game_name,))
-        game_id = cursor.fetchone()[0]
+        game_id = cursor.fetchall()[0][0]
 
         # Read review count from file
         review_count = 0
@@ -317,7 +317,7 @@ def edit_user():
             'JOIN emp_user ed ON e.emp_id = ed.emp_id '
             'JOIN user d ON ed.user_id = d.user_id '
             'WHERE d.user_id = %s', (user_id,))
-        emp_id = cursor.fetchone()[0]
+        emp_id = cursor.fetchall()[0][0]
         print(emp_id)
         return redirect(f'/users_managed?user={emp_id}')
 
@@ -325,7 +325,7 @@ def edit_user():
     user_id = request.args.get('username')
     print(user_id)
     cursor.execute('SELECT * FROM user WHERE user_id = %s', (user_id,))
-    user_details = cursor.fetchone()
+    user_details = cursor.fetchall()[0]
     print(user_details)
     return render_template('edit_user.html', user_data=user_details)
 
@@ -348,14 +348,14 @@ def edit_employee():
             'JOIN emp_dept ed ON e.emp_id = ed.emp_id '
             'JOIN department d ON ed.dept_id = d.dept_id '
             'WHERE e.emp_id = %s', (emp_id,))
-        emp_id = cursor.fetchone()[0]
+        emp_id = cursor.fetchall()[0][0]
         print(emp_id)
         return redirect(f'/employees_managed?user={emp_id}')
 
     # Handle GET request to display edit form
     emp_id = request.args.get('emp_id')
     cursor.execute('SELECT emp_id, emp_name, email FROM employee WHERE emp_id = %s', (emp_id,))
-    emp_details = cursor.fetchone()
+    emp_details = cursor.fetchall()[0]
     return render_template('edit_employee.html', employee=emp_details)
 
 
@@ -386,9 +386,9 @@ def add_employee():
 
         # Retrieve department and project IDs based on the selected names
         cursor.execute('SELECT dept_id FROM department WHERE dept_name = %s', (dept_name,))
-        dept_id = cursor.fetchone()[0]
+        dept_id = cursor.fetchall()[0][0]
         cursor.execute('SELECT proj_id FROM project WHERE proj_name = %s', (proj_name,))
-        proj_id = cursor.fetchone()[0]
+        proj_id = cursor.fetchall()[0][0]
 
         # Insert employee and department association into emp_dept table
         cursor.execute('INSERT INTO emp_dept (emp_id, dept_id) VALUES (%s, %s)', (emp_id, dept_id))
@@ -403,7 +403,7 @@ def add_employee():
             'JOIN emp_dept ed ON e.emp_id = ed.emp_id '
             'JOIN department d ON ed.dept_id = d.dept_id '
             'WHERE e.emp_id = %s', (emp_id,))
-        emp_id = cursor.fetchone()[0]
+        emp_id = cursor.fetchall()[0][0]
         print(emp_id)
         return redirect(f'/employees_managed?user={emp_id}')
 
