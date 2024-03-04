@@ -79,22 +79,22 @@ def authenticate():
                            'JOIN department d ON e.emp_id = d.mgr_id '
                            'WHERE e.email=%s AND e.password=%s',
                            (email, password))
-            mgr = cursor.fetchall()[0]
-            return redirect(url_for('manager', user_data=mgr))
+            mgr = cursor.fetchone()
+            return redirect(url_for('manager', user_data=mgr[0]))
 
         cursor.execute('SELECT DISTINCT e.emp_id, e.emp_address, e.emp_name, e.emp_age, e.emp_dob, '
                        'e.emp_sal, e.emp_posn, e.skills, e.email, e.password '
                        'FROM employee e '
                        'WHERE e.email=%s AND e.password=%s', (email, password))
-        emp = cursor.fetchall()
+        emp = cursor.fetchone()
         if emp:
-            return redirect(url_for('employee', user_data=emp))
+            return redirect(url_for('employee', user_data=emp[0]))
         else:
             # Check user credentials in the users table
             cursor.execute('SELECT * FROM user WHERE email=%s AND password=%s', (email, password))
-            user = cursor.fetchall()[0]
+            user = cursor.fetchone()
             if user:
-                return redirect(url_for('user', user_data=user))
+                return redirect(url_for('user', user_data=user[0]))
             else:
                 return redirect('/login?x=True')
 
@@ -107,7 +107,7 @@ def manager():
     # Fetch manager-specific data from the database
     user_data = request.args.get('user_data')
     cursor.execute('SELECT emp_name from employee where emp_id = %s', (user_data,))
-    name = cursor.fetchall()[0]
+    name = cursor.fetchall()
     return render_template('manager.html', user_data=user_data, name=name)
 
 
@@ -116,7 +116,7 @@ def employee():
     # Fetch employee-specific data from the database
     user_data = request.args.get('user_data')
     cursor.execute('SELECT emp_name from employee where emp_id = %s', (user_data,))
-    name = cursor.fetchall()[0]
+    name = cursor.fetchall()
     return render_template('employee.html', user_data=user_data, name=name)
 
 
@@ -125,8 +125,8 @@ def user():
     # Fetch employee-specific data from the database
     user_data = request.args.get('user_data')
     cursor.execute('SELECT user_name from user where user_id = %s', (user_data,))
-    name = cursor.fetchall()[0]
-    return render_template('user.html', user_data=user_data, name=name)
+    name = cursor.fetchall()
+    return render_template('user.html', user_data=user_data, name=name[0])
 
 
 # TODO 2: Profile Pages
@@ -214,7 +214,7 @@ def dept_details():
 @app.route('/download', methods=['POST', 'GET'])
 def download():
     if request.method == 'POST':
-        user_data = request.args.get('user')
+        user_data = request.form.get('user_id')
         cursor.execute('SELECT g.game_name, g.version, g.repo_id, b.branch_location '
                        'FROM game g '
                        'JOIN game_at_branch gab ON g.game_id = gab.game_id '
@@ -225,6 +225,7 @@ def download():
         subprocess.run(['git', 'clone', game_id])
         repo_name = game_id.split('/')[-1].split('.')[0]  # Extract Folder name
         os.startfile(f'{repo_name}')
+
         return redirect(url_for('download', games=games, user_data=user_data, success='dtrue'))
 
     user_data = request.args.get('user')

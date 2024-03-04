@@ -105,9 +105,10 @@
             <td>{{ game[1] }}</td>
             <td>{{ game[3] }}</td>
             <td>
-                <form action="/download" method="post">
+                <form action="/download" method="POST">
                     <input type="hidden" name="game_id" value="{{ game[2] }}">
                     <input type="hidden" name="user_id" value="{{ user_data }}">
+
                     <button type="submit" class="download-button">Download</button>
                 </form>
             </td>
@@ -138,7 +139,7 @@
     <script>
         // Function to go back to the previous page
         function goBack() {
-            window.location.href= '/user?user_data={{user_data}}';
+            window.history.back();
         }
 
         // Check if the URL contains a success parameter indicating review addition
