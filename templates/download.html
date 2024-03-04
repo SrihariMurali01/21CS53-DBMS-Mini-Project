@@ -60,6 +60,20 @@
         .add-review-form input[type="submit"]:hover {
             background-color: #45a049;
         }
+        .download-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-button:hover {
+            background-color: #45a049;
+        }
+
         .go-back-btn {
             padding: 10px;
             background-color: #555;
@@ -90,7 +104,13 @@
             <td>{{ game[0] }}</td>
             <td>{{ game[1] }}</td>
             <td>{{ game[3] }}</td>
-            <td><a href="{{ game[2] }}" target="_blank">Download</a></td>
+            <td>
+                <form action="/download" method="post">
+                    <input type="hidden" name="game_id" value="{{ game[2] }}">
+                    <input type="hidden" name="user_id" value="{{ user_data }}">
+                    <button type="submit" class="download-button">Download</button>
+                </form>
+            </td>
             <td>
                 <form class="add-review-form" action="/add_review" method="POST">
                     <input type="hidden" name="game_name" value="{{ game[0] }}">
@@ -131,6 +151,14 @@
         if (success === 'false') {
             alert('Review already exists!')
         }
+        if (success === 'dtrue') {
+            alert('Downloaded successfully!')
+        }
+        if (success === 'dfalse'){
+            alert('Error: Failed to execute git clone command.')
+        }
+
+
     </script>
 </body>
 </html>

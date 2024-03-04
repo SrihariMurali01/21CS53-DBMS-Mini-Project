@@ -11,7 +11,7 @@
             color: #fff;
             margin: 0;
             padding: 0;
-            background-image: url('static/images/bg.gif');
+            background-image: url('static/images/home_bg.jpg');
             background-position: center;
             background-size: cover;
             background-attachment: fixed;
@@ -21,7 +21,12 @@
             background-color: #F4EDED;
             padding: 10px;
             text-align: center;
-
+            background-image: url('/static/images/nav.png');
+            background-repeat: no-repeat;
+            background-size: 1800px; /* Ensure the background image covers the entire navbar */
+            align-items: center;
+            background-position: -130px -90px;
+            color: #fff;
         }
         .container {
             max-width: 800px;
@@ -33,10 +38,10 @@
         h1 {
             font-size: 36px;
             margin-bottom: 20px;
-            color: #000;
+            color: #fff;
         }
         h4{
-            color: #000;
+            color: #fff;
         }
         h3{
             font-size: 20px;
@@ -46,19 +51,21 @@
             text-align: center;
         }
         button {
-            background-color: #00ff00;
-            color: #000;
+            background-color: #ccc; /* Grey background */
+            color: #000; /* Black text color */
             padding: 12px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 18px;
             transition: background-color 0.3s ease;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Adjust shadow color */
         }
+
         button:hover {
-            background-color: #008000;
+            background-color: #999; /* Darker grey on hover */
         }
+
         p{
             font-size: 18px;
             line-height: 1.5;
@@ -94,7 +101,7 @@
         <h1>Twilight Quirks Studios</h1>
         <h4>Ain't no place like home!</h4>
         <button onclick="location.href='/login'">Sign In</button>
-    </div>
+    </div><br>
     <p>Welcome to our gaming hub, where adventure awaits at every click!</p>
     <p>    Discover a world of immersive gameplay, breathtaking graphics, and thrilling challenges.</p>
     <p>    Whether you're a seasoned gamer or just starting out, there's something here for everyone.</p>

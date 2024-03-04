@@ -1,6 +1,10 @@
+import subprocess
+
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 from datetime import date
+import os
+from pathlib import Path
 
 app = Flask(__name__)
 
@@ -207,9 +211,22 @@ def dept_details():
 # TODO 5: Download Page
 
 # Route for the downloads page
-@app.route('/download')
+@app.route('/download', methods=['POST', 'GET'])
 def download():
-    # Fetch list of games with branch details from the database
+    if request.method == 'POST':
+        user_data = request.args.get('user')
+        cursor.execute('SELECT g.game_name, g.version, g.repo_id, b.branch_location '
+                       'FROM game g '
+                       'JOIN game_at_branch gab ON g.game_id = gab.game_id '
+                       'JOIN branch b ON gab.branch_id = b.branch_id')
+        games = cursor.fetchall()
+        game_id = request.form.get('game_id')
+        print(game_id)
+        subprocess.run(['git', 'clone', game_id])
+        repo_name = game_id.split('/')[-1].split('.')[0]  # Extract Folder name
+        os.startfile(f'{repo_name}')
+        return redirect(url_for('download', games=games, user_data=user_data, success='dtrue'))
+
     user_data = request.args.get('user')
     cursor.execute('SELECT g.game_name, g.version, g.repo_id, b.branch_location '
                    'FROM game g '
