@@ -17,7 +17,7 @@
         th {
             background-color: #f2f2f2;
         }
-        .edit-btn, .add-btn {
+        .edit-btn, .add-btn, .back {
             background-color: #4CAF50; /* Green */
             border: none;
             color: white;
@@ -57,5 +57,11 @@
     </table>
     <!-- Button to add new employees -->
     <button class="add-btn" onclick="window.location.href='/add_employee'">Add Employee</button>
+    <button type="button" class="back" onclick="goBack()">Go Back</button>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </body>
 </html>

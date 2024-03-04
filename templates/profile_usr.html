@@ -12,5 +12,11 @@
         <p>Date Joined: {{ user_data[3] }}</p>
         <p>Email: {{ user_data[4] }}</p>
     </div>
+    <button type="button" onclick="goBack()">Go Back</button>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </body>
 </html>

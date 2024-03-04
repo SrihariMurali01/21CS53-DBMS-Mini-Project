@@ -302,6 +302,7 @@ def edit_user():
     print(user_details)
     return render_template('edit_user.html', user_data=user_details)
 
+
 # REDUNDANT
 # @app.route('/add_user', methods=['GET','POST'])
 # def add_user():
@@ -420,6 +421,38 @@ def sql_command():
             return render_template('sql_command.html', error_message=error_message)
 
     return render_template('sql_command.html', results=None, error_message=None)
+
+
+# Flask route for adding a project by an employee
+# Flask route for adding a project by an employee
+@app.route('/add_project', methods=['GET', 'POST'])
+def add_project():
+    if request.method == 'POST':
+        # Retrieve form data
+        proj_id = request.form['proj_id']
+        proj_name = request.form['proj_name']
+        proj_status = request.form['proj_status']
+        start_date = request.form['start_date']
+        duration = request.form['durn']
+        emp_id = request.form['emp_id']
+        print(emp_id)
+        # Insert project details into the database
+        cursor.execute(
+            'INSERT INTO project (proj_id,  proj_name, proj_status) VALUES (%s, %s, %s)',
+            (proj_id, proj_name, proj_status))
+        conn.commit()
+
+        # Update the emp_proj table to associate the employee with the project
+        cursor.execute('INSERT INTO emp_proj (emp_id, proj_id, proj_start, proj_durn) VALUES (%s, %s, %s, %s)',
+                       (emp_id, proj_id, start_date, duration))
+        conn.commit()
+
+        # Redirect to a page indicating success
+        return redirect('/projects_managed?user_data={}'.format(emp_id))
+
+    # If it's a GET request, render the add_project.html template
+    emp_id = request.args.get('user_data')
+    return render_template('add_project.html', emp_id=emp_id)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"], textarea, input[type="date"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 20px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .back {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <h2>Add Project</h2>
+    <form action="/add_project" method="post">
+        <label for="proj_name">Project Name:</label>
+        <input type="text" id="proj_name" name="proj_name" required>
+
+        <label for="proj_id">Project ID:</label>
+        <input type='text' id="proj_id" name="proj_id" required>
+
+        <label for="proj_status">Project Status:</label>
+        <select id="proj_status" name="proj_status" required>
+            <option value="Ongoing">Ongoing</option>
+            <option value="Completed">Completed</option>
+        </select>
+        <br />
+
+
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" required>
+
+        <label for="durn">End Date:</label>
+        <input type="text" id="durn" name="durn" required>
+
+        <input type="hidden" name="emp_id" value="{{ emp_id }}"> <!-- Assuming user_data is passed to the template -->
+
+        <input type="submit" value="Add Project">
+        <button type="button" class='back' onclick="goBack()">Go Back</button>
+        <script>
+        function goBack() {
+            window.history.back();
+        }
+        </script>
+    </form>
+</body>
+</html>
