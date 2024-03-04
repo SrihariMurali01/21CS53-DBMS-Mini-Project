@@ -4,28 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        div {
+            background-color: rgba(52, 58, 64, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            width: 400px; /* Adjust the width as needed */
+            margin: auto; /* Center the login box horizontally */
+        }
+        .background-image {
+            background: url('static/images/login_bg.gif') center/cover fixed no-repeat;
+            filter: blur(10px);
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            z-index: -1;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
+        }
+        div {
+            background-color: rgba(52, 58, 64, 0.8);;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            z-index: 1; /* Ensure the login box appears above the blurred background */
+        }
+        h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #ff6b6b;
+            margin: 10px 0;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        input {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #4CAF50;
+            border-radius: 5px;
+            background-color: #272c31;
+            color: #fff;
+            width: 100%;
+        }
+        button[type='submit'] {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+        button[type='submit']:hover {
+            background-color: #45a049;
+        }
+        .back {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background-color 0.3s ease;
+        }
+        .back:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
+    <div class="background-image"></div>
+    <div class="overlay"></div>
     <div>
-        <h2>Login</h2>
+        <h2>🎮Login🎮</h2>
         {% if request.args.get('x') == 'True' %}
-            <p style="color: red;">Login failed. Please check your email and password.</p>
+            <p>Login failed. Please check your email and password. ❌</p>
         {% endif %}
         <form action="/authenticate" method="post">
             <label for="email">Email:</label>
-            <input type="text" id="email" name="email" required><br>
+            <input type="text" id="email" name="email" required>
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required><br>
+            <input type="password" id="password" name="password" required>
 
-            <button type="submit">Sign In</button>
+            <button type="submit">🔐 Sign In</button>
         </form>
-        <p>New user? <a href="/signup">Sign up here</a></p>
+        <p>New user? <a href="/signup">Sign up here</a> 🚀</p>
+        <button type="button" class="back" onclick="goBack()">Go Back</button>
     </div>
-    <button type="button" onclick="goBack()">Go Back</button>
     <script>
         function goBack() {
-            window.history.back();
+            window.location.href = '/';
         }
     </script>
 </body>

@@ -4,27 +4,114 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px 0 0 -50px;
+            background: linear-gradient(180deg, #171717 0%, #1f1f1f 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Center vertically */
+            height: 97vh;
+        }
+        .background-image {
+            background: url('/static/images/signup.gif') center/cover fixed no-repeat;
+            filter: blur(4px);
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            z-index: -1;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 36px;
+            color: #4CAF50; /* Green accent color */
+            margin-bottom: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px 10px 10px 20px;
+            width: 500px;
+            padding: 30px;
+            background-color: #333;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #4CAF50;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: #1f1f1f;
+            color: #fff;
+        }
+
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .back {
+            background-color: #333;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .back:hover {
+            background-color: #1f1f1f;
+        }
+    </style>
 </head>
 <body>
+    <div class="background-image"></div>
     <div>
         <h2>Sign Up</h2>
         <form action="/register" method="post">
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required><br>
+            <input type="text" id="username" name="username" required>
 
             <label for="email">Email:</label>
-            <input type="text" id="email" name="email" required><br>
+            <input type="text" id="email" name="email" required>
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required><br>
+            <input type="password" id="password" name="password" required>
 
             <button type="submit">Sign Up</button>
         </form>
     </div>
-    <button type="button" onclick="goBack()">Go Back</button>
+    <button type="button" class='back' onclick="goBack()">Go Back</button>
     <script>
         function goBack() {
-            window.history.back();
+            window.location.href = '/login';
         }
     </script>
 </body>

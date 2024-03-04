@@ -102,21 +102,27 @@ def authenticate():
 def manager():
     # Fetch manager-specific data from the database
     user_data = request.args.get('user_data')
-    return render_template('manager.html', user_data=user_data)
+    cursor.execute('SELECT emp_name from employee where emp_id = %s', (user_data,))
+    name = cursor.fetchone()
+    return render_template('manager.html', user_data=user_data, name=name)
 
 
 @app.route('/employee')
 def employee():
     # Fetch employee-specific data from the database
     user_data = request.args.get('user_data')
-    return render_template('employee.html', user_data=user_data)
+    cursor.execute('SELECT emp_name from employee where emp_id = %s', (user_data,))
+    name = cursor.fetchone()
+    return render_template('employee.html', user_data=user_data, name=name)
 
 
 @app.route('/user')
 def user():
     # Fetch employee-specific data from the database
     user_data = request.args.get('user_data')
-    return render_template('user.html', user_data=user_data)
+    cursor.execute('SELECT user_name from user where user_id = %s', (user_data,))
+    name = cursor.fetchone()
+    return render_template('user.html', user_data=user_data, name=name)
 
 
 # TODO 2: Profile Pages
@@ -234,14 +240,18 @@ def add_review():
         # Generate review ID
         review_id = int(f'{review_count + 100}')
 
-        # Insert review into the database
-        cursor.execute('INSERT INTO review (rev_id, rating, comment, rev_date) VALUES (%s, %s, %s, %s)',
-                       (review_id, rating, comment, date.today().strftime('%Y-%m-%d')))
-        conn.commit()
-        # Update user_game and game_review tables
-        cursor.execute('INSERT INTO user_game (user_id, game_id) VALUES (%s, %s)', (user_id, game_id))
-        cursor.execute('INSERT INTO game_review (game_id, rev_id) VALUES (%s, %s)', (game_id, review_id))
-        conn.commit()
+        try:
+            # Insert review into the database
+            cursor.execute('INSERT INTO review (rev_id, rating, comment, rev_date) VALUES (%s, %s, %s, %s)',
+                           (review_id, rating, comment, date.today().strftime('%Y-%m-%d')))
+            conn.commit()
+            # Update user_game and game_review tables
+            cursor.execute('INSERT INTO user_game (user_id, game_id) VALUES (%s, %s)', (user_id, game_id))
+            cursor.execute('INSERT INTO game_review (game_id, rev_id) VALUES (%s, %s)', (game_id, review_id))
+            conn.commit()
+        except mysql.connector.errors.IntegrityError:
+            conn.rollback()
+            return redirect(url_for('download', user=user_id, success='false'))
 
         # Update review count in the file
         with open('rev_count.txt', 'w') as f:
@@ -301,18 +311,6 @@ def edit_user():
     user_details = cursor.fetchone()
     print(user_details)
     return render_template('edit_user.html', user_data=user_details)
-
-
-# REDUNDANT
-# @app.route('/add_user', methods=['GET','POST'])
-# def add_user():
-#     # Process form submission to add new user
-#     user_name = request.form['user_name']
-#     email = request.form['email']
-#     # Insert new user into the database
-#     cursor.execute('INSERT INTO user (user_name, email) VALUES (%s, %s)', (user_name, email))
-#     conn.commit()
-#     return redirect('/users_managed')
 
 
 @app.route('/edit_employee', methods=['GET', 'POST'])
@@ -423,7 +421,6 @@ def sql_command():
     return render_template('sql_command.html', results=None, error_message=None)
 
 
-# Flask route for adding a project by an employee
 # Flask route for adding a project by an employee
 @app.route('/add_project', methods=['GET', 'POST'])
 def add_project():

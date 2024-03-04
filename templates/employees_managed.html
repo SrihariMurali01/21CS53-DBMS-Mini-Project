@@ -5,30 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employees Managed</title>
     <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #191b28;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            font-size: 32px;
+            color: #4CAF50; /* Green accent color */
+        }
+
         table {
             border-collapse: collapse;
-            width: 100%;
+            width: 80%;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
         }
+
         th, td {
-            border: 1px solid #dddddd;
+            border: 1px solid #2b2d3c; /* Dark border color */
             text-align: left;
-            padding: 8px;
+            padding: 16px;
         }
+
         th {
-            background-color: #f2f2f2;
+            background-color: #2b2d3c; /* Dark background color */
+            color: #fff;
         }
-        .edit-btn, .add-btn, .back {
+
+        .edit-btn, .add-btn {
             background-color: #4CAF50; /* Green */
             border: none;
             color: white;
-            padding: 8px 16px;
+            padding: 12px 20px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
+            font-size: 18px;
+            margin: 20px 8px;
             cursor: pointer;
             border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            margin: 20px 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+
+        }
+
+        .edit-btn:hover, .add-btn:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        /* Responsive Design */
+        @media only screen and (max-width: 768px) {
+            table {
+                width: 100%;
+            }
+            .edit-btn, .add-btn, .back {
+                margin: 10px 4px;
+            }
         }
     </style>
 </head>
@@ -41,7 +100,7 @@
                 <th>Employee ID</th>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Action</th> <!-- Add a column for edit action -->
+                <th>Edit</th> <!-- Add a column for edit action -->
             </tr>
         </thead>
         <tbody>

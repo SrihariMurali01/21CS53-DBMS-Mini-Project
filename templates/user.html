@@ -4,22 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #1b1b1b 0%, #2c2c2c 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            font-size: 36px;
+            color: #4CAF50; /* Green accent color */
+        }
+
+        /* Left side menu */
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        li {
+            margin-bottom: 15px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #ddd;
+            font-size: 20px;
+            transition: color 0.3s ease;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        a:hover {
+            color: #4CAF50;
+            border-bottom: 1px solid #4CAF50 /* Light green background on hover */
+        }
+    </style>
 </head>
 <body>
-    <div>
-        <h2>User Page</h2>
-        <!-- Left side menu -->
-        <div style="float: left; width: 20%;">
-            <ul>
-                <li><a href="/profile_usr?user={{user_data}}">Profile</a></li>
-                <li><a href="/download?user={{user_data}}">Downloads</a></li>
-                <li><a href="/reviews_added?user={{user_data}}">Reviews Added</a></li> <!-- Added link to reviews added page -->
-            </ul>
-        </div>
-        <!-- Content area -->
-        <div style="float: left; width: 80%;">
-            <!-- Content for the manager page -->
-        </div>
-    </div>
+    <h2>Welcome, {{name[0]}}!</h2>
+    <!-- Left side menu -->
+    <ul>
+        <li><a href="/profile_usr?user={{user_data}}">Profile</a></li>
+        <li><a href="/download?user={{user_data}}">Downloads</a></li>
+        <li><a href="/reviews_added?user={{user_data}}">Reviews Added</a></li>
+        <li><a href="/login">Logout</a></li>
+    </ul>
 </body>
 </html>

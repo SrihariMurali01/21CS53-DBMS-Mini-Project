@@ -6,33 +6,52 @@
     <title>SQL Command</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 20px;
+            background: linear-gradient(180deg, #171717 0%, #1f1f1f 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
+
         h2 {
-            color: #333;
             text-align: center;
+            font-size: 36px;
+            color: #4CAF50; /* Green accent color */
+            margin-bottom: 20px;
         }
+
         form {
             margin: 20px auto;
             max-width: 600px;
             padding: 20px;
-            border: 1px solid #ccc;
+            border: 1px solid #4CAF50;
             border-radius: 5px;
-            background-color: #f9f9f9;
+            background-color: #333;
         }
+
         label {
             font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 10px;
+            display: block;
         }
-        input[type="text"], textarea {
+
+        textarea {
             width: 100%;
             padding: 10px;
             margin: 5px 0 20px;
-            border: 1px solid #ccc;
+            border: 1px solid #4CAF50;
             border-radius: 3px;
             box-sizing: border-box;
+            background-color: #1f1f1f;
+            color: #fff;
         }
-        input[type="submit"], input[type="button"] {
+
+        input[type="submit"],
+        input[type="button"] {
             background-color: #4CAF50;
             color: white;
             padding: 12px 20px;
@@ -41,25 +60,39 @@
             cursor: pointer;
             float: right;
             margin-left: 10px;
+            transition: background-color 0.3s ease;
         }
-        input[type="submit"]:hover, input[type="button"]:hover {
+
+        input[type="submit"]:hover,
+        input[type="button"]:hover {
             background-color: #45a049;
         }
+
         .result-container {
             margin-top: 20px;
         }
+
+        h3 {
+            color: #4CAF50;
+        }
+
         .result-table {
             border-collapse: collapse;
             width: 100%;
+            margin-top: 10px;
         }
-        .result-table th, .result-table td {
+
+        .result-table th,
+        .result-table td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
+
         .result-table th {
             background-color: #f2f2f2;
         }
+
         .error-message {
             color: red;
             font-weight: bold;

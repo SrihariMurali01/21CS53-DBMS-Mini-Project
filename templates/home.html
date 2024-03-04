@@ -6,49 +6,72 @@
     <title>Home Page</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Microsoft Sans Serif', Tahoma, Geneva, Verdana, sans-serif, Limelight;
             background-color: #171717;
             color: #fff;
             margin: 0;
             padding: 0;
+            background-image: url('static/images/bg.gif');
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
         }
         .navbar {
-            background-color: #4CAF50;
+            background-color: #F4EDED;
             padding: 10px;
             text-align: center;
+
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             text-align: center;
+
         }
         h1 {
             font-size: 36px;
             margin-bottom: 20px;
+            color: #000;
+        }
+        h4{
+            color: #000;
+        }
+        h3{
+            font-size: 20px;
+            margin-top: 70px;
+            margin-bottom: -10px;
+            color: #ffffff;
+            text-align: center;
         }
         button {
-            background-color: #fff;
-            color: #4CAF50;
+            background-color: #00ff00;
+            color: #000;
             padding: 12px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 18px;
             transition: background-color 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
         }
         button:hover {
-            background-color: #ddd;
+            background-color: #008000;
         }
-        p {
+        p{
             font-size: 18px;
             line-height: 1.5;
+            font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: #ffffff;
+            justify-content:center;
+            text-align: center;
         }
         .game-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            margin-top: 40px;
+
         }
         .game {
             margin: 20px;
@@ -56,8 +79,8 @@
             transition: transform 0.3s ease;
         }
         .game img {
-            width: 200px;
-            height: 200px;
+            width: 110px;
+            height: 100px;
             border-radius: 10px;
             margin-bottom: 10px;
         }
@@ -68,27 +91,39 @@
 </head>
 <body>
     <div class="navbar">
-        <h1>Welcome to the Home Page</h1>
+        <h1>Twilight Quirks Studios</h1>
+        <h4>Ain't no place like home!</h4>
         <button onclick="location.href='/login'">Sign In</button>
     </div>
+    <p>Welcome to our gaming hub, where adventure awaits at every click!</p>
+    <p>    Discover a world of immersive gameplay, breathtaking graphics, and thrilling challenges.</p>
+    <p>    Whether you're a seasoned gamer or just starting out, there's something here for everyone.</p>
+    <p>    This is your gateway to an exciting gaming experience. Join now and embark on thrilling adventures!</p>
+    <h3>Games we've Developed!</h3>
     <div class="container">
         <div class="game-container">
             <div class="game">
-                <img src="placeholder_image1.jpg" alt="Game Image">
-                <p>Game Name 1</p>
+                <img src="/static/images/image1.jpg" alt="Game Image">
+                <p>Monkey Lander</p>
             </div>
             <div class="game">
-                <img src="placeholder_image2.jpg" alt="Game Image">
-                <p>Game Name 2</p>
+                <img src="/static/images/image2.jpeg" alt="Game Image">
+                <p>Paint Ball</p>
             </div>
             <div class="game">
-                <img src="placeholder_image3.jpg" alt="Game Image">
-                <p>Game Name 3</p>
+                <img src="/static/images/image3.jpg" alt="Game Image">
+                <p>Red Beard</p>
             </div>
-            <!-- Add more game placeholders here -->
+            <div class="game">
+                <img src="/static/images/image4.jpg" alt="Game Image">
+                <p>Skate Boarding</p>
+            </div>
+            <div class="game">
+                <img src="/static/images/image5.jpg" alt="Game Image">
+                <p>Space Invaders</p>
+            </div>
         </div>
-        <!-- Body filler content -->
-        <p>This is filler content for the home page.</p>
+
     </div>
 </body>
 </html>

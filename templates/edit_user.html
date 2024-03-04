@@ -6,36 +6,58 @@
     <title>Edit User</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1b1b1b;
+            color: #fff;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
-        h2 {
-            margin-bottom: 20px;
+        h1 {
+            font-weight: bold;
+            font-size: 40px;
+            color: #4CAF50; /* Green accent color */
+            margin-top: 20px;
         }
         form {
             display: grid;
-            grid-template-columns: 150px auto;
-            gap: 10px;
+            grid-template-columns: 100px auto;
+            gap: 20px;
+            width: 500px; /* Adjust max-width as needed */
+            padding: 20px;
+            box-sizing: border-box;
         }
         label {
             text-align: right;
             padding-right: 10px;
+            color: #ddd;
         }
         input[type="text"],
         input[type="email"],
         input[type="password"],
         input[type="date"] {
-            width: 100%;
-            padding: 5px;
+            width: calc(100% - 20px);
+            padding: 12px;
+            background-color: #333;
+            border: 1px solid #555;
+            color: #fff;
+            margin-bottom: 10px;
+            box-sizing: border-box;
         }
         input[type="submit"] {
-            width: auto;
-            padding: 8px 20px;
+            width: 100%;
+            padding: 15px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
         input[type="submit"]:hover {
             background-color: #45a049;
@@ -43,7 +65,7 @@
     </style>
 </head>
 <body>
-    <h2>Edit User</h2>
+    <h1>Edit User</h1>
     <form action="/edit_user" method="POST">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" value="{{ user_data[1] }}">
