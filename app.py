@@ -4,7 +4,6 @@ from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 from datetime import date
 import os
-from pathlib import Path
 
 app = Flask(__name__)
 
@@ -35,6 +34,7 @@ def signup():
     return render_template('signup.html')
 
 
+# To register a new user
 @app.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':
@@ -58,12 +58,14 @@ def register():
     return render_template('signup.html')
 
 
+# To authenticate a login, and make necessary actions.
 @app.route('/authenticate', methods=['POST'])
 def authenticate():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
         print(email, password)
+
         # Check user credentials in the employee table
         cursor.execute(
             'SELECT distinct e.email, e.password '
@@ -73,6 +75,7 @@ def authenticate():
             (email, password))
         emp = cursor.fetchall()
         if emp:
+            # Check if the employee is a manager
             cursor.execute('SELECT DISTINCT e.emp_id, e.emp_address, e.emp_name, e.emp_age, e.emp_dob, '
                            'e.emp_sal, e.emp_posn, e.skills, e.email, e.password '
                            'FROM employee e '
@@ -82,6 +85,7 @@ def authenticate():
             mgr = cursor.fetchone()
             return redirect(url_for('manager', user_data=mgr[0]))
 
+        # If it's just an employee
         cursor.execute('SELECT DISTINCT e.emp_id, e.emp_address, e.emp_name, e.emp_age, e.emp_dob, '
                        'e.emp_sal, e.emp_posn, e.skills, e.email, e.password '
                        'FROM employee e '
@@ -90,6 +94,7 @@ def authenticate():
         if emp:
             return redirect(url_for('employee', user_data=emp[0]))
         else:
+
             # Check user credentials in the users table
             cursor.execute('SELECT * FROM user WHERE email=%s AND password=%s', (email, password))
             user = cursor.fetchone()
@@ -102,6 +107,8 @@ def authenticate():
 
 
 # TODO 1: Entry Pages
+
+# Manager Page
 @app.route('/manager')
 def manager():
     # Fetch manager-specific data from the database
@@ -111,6 +118,7 @@ def manager():
     return render_template('manager.html', user_data=user_data, name=name)
 
 
+# Employee Page
 @app.route('/employee')
 def employee():
     # Fetch employee-specific data from the database
@@ -120,6 +128,7 @@ def employee():
     return render_template('employee.html', user_data=user_data, name=name)
 
 
+# User Page
 @app.route('/user')
 def user():
     # Fetch employee-specific data from the database
@@ -130,6 +139,7 @@ def user():
 
 
 # TODO 2: Profile Pages
+# Profile Page - For employee and Manager.
 @app.route('/profile_emp')
 def profile_emp():
     user_data = request.args.get('user')
@@ -140,6 +150,7 @@ def profile_emp():
     return render_template('profile_emp.html', user_data=data[0])
 
 
+# Profile Page - For users
 @app.route('/profile_usr')
 def profile_usr():
     user_data = request.args.get('user')
@@ -151,7 +162,7 @@ def profile_usr():
 
 
 # TODO 3: Tables for management
-
+# Users Managed Page
 @app.route('/users_managed')
 def users_managed():
     # Fetch users managed by the employee from the database
@@ -161,12 +172,13 @@ def users_managed():
         'FROM employee e '
         'JOIN emp_user ed ON e.emp_id = ed.emp_id '
         'JOIN user d ON ed.user_id = d.user_id '
-        'WHERE e.emp_id = %s', (emp_id,))
+        'WHERE e.emp_id = %s', (emp_id,))  # Tables being joined: EMPLOYEE : EMP_USER : USER
     users_managed = cursor.fetchall()
     print(users_managed)
     return render_template('users_managed.html', users_managed=users_managed)
 
 
+# Employees Managed.
 @app.route('/employees_managed')
 def employees_managed():
     # Fetch employees managed by the manager from the database
@@ -176,11 +188,12 @@ def employees_managed():
         'FROM employee e '
         'JOIN emp_dept ed ON e.emp_id = ed.emp_id '
         'JOIN department d ON ed.dept_id = d.dept_id '
-        'WHERE d.mgr_id = %s', (mgr_id,))
+        'WHERE d.mgr_id = %s', (mgr_id,))  # Tables being joined: EMPLOYEE : EMP_DEPT : DEPARTMENT
     emp_managed = cursor.fetchall()
     return render_template('employees_managed.html', emp_managed=emp_managed)
 
 
+# Projects Managed
 @app.route('/projects_managed')
 def projects_managed():
     # Fetch projects managed by the employee from the database
@@ -189,27 +202,26 @@ def projects_managed():
         'SELECT p.proj_id, p.proj_name, p.proj_status, ep.proj_start '
         'FROM project p, emp_proj ep '
         'where p.proj_id = ep.proj_id '
-        'and ep.emp_id = %s', (emp_id,))
+        'and ep.emp_id = %s', (emp_id,))  # Tables being joined: PROJECT : EMP_PROJ
     projects_managed = cursor.fetchall()
     return render_template('projects_managed.html', projects_managed=projects_managed)
 
 
 # TODO 4: Department Details
-
+# Department Details
 @app.route('/dept_details')
 def dept_details():
     # Fetch department details from the database
     curr_emp_id = request.args.get('user')
     print(curr_emp_id)
     cursor.execute('SELECT d.* FROM department d JOIN emp_dept ed ON d.dept_id = ed.dept_id WHERE ed.emp_id = %s',
-                   (curr_emp_id,))
+                   (curr_emp_id,))  # Tables being joined: DEPARTMENT : EMP_DEPT
     dept_details = cursor.fetchall()
     print(dept_details)
     return render_template('dept_details.html', dept_details=dept_details)
 
 
 # TODO 5: Download Page
-
 # Route for the downloads page
 @app.route('/download', methods=['POST', 'GET'])
 def download():
@@ -219,6 +231,7 @@ def download():
                        'FROM game g '
                        'JOIN game_at_branch gab ON g.game_id = gab.game_id '
                        'JOIN branch b ON gab.branch_id = b.branch_id')
+        # Tables being joined: GAME : GAME_AT_BRANCH : BRANCH
         games = cursor.fetchall()
         game_id = request.form.get('game_id')
         print(game_id)
@@ -233,6 +246,7 @@ def download():
                    'FROM game g '
                    'JOIN game_at_branch gab ON g.game_id = gab.game_id '
                    'JOIN branch b ON gab.branch_id = b.branch_id')
+    # Tables being joined: GAME : GAME_AT_BRANCH : BRANCH
     games = cursor.fetchall()
     return render_template('download.html', games=games, user_data=user_data)
 
@@ -288,6 +302,7 @@ def reviews_added():
                    'JOIN user_game ug ON gr.game_id = ug.game_id '
                    'JOIN game g ON ug.game_id = g.game_id '
                    'WHERE ug.user_id = %s', (user_id,))
+    # Tables being joined: REVIEW : GAME_REVIEW : USER_GAME : GAME
     reviews = cursor.fetchall()
     return render_template('reviews_added.html', reviews=reviews)
 
@@ -401,6 +416,7 @@ def add_employee():
             'JOIN emp_dept ed ON e.emp_id = ed.emp_id '
             'JOIN department d ON ed.dept_id = d.dept_id '
             'WHERE e.emp_id = %s', (emp_id,))
+        # Tables being joined: EMPLOYEE : EMP_DEPT : DEPARTMENT
         emp_id = cursor.fetchall()[0][0]
         print(emp_id)
         return redirect(f'/employees_managed?user={emp_id}')
@@ -429,14 +445,13 @@ def sql_command():
             results = cursor.fetchall()
             return render_template('sql_command.html', results=results)
         except Exception as e:
-            # Handle errors gracefully
             error_message = str(e)
             return render_template('sql_command.html', error_message=error_message)
 
     return render_template('sql_command.html', results=None, error_message=None)
 
 
-# Flask route for adding a project by an employee
+# Route for adding a project by an employee
 @app.route('/add_project', methods=['GET', 'POST'])
 def add_project():
     if request.method == 'POST':
@@ -468,4 +483,4 @@ def add_project():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0')  # So that devices present in the same network can access the site.
