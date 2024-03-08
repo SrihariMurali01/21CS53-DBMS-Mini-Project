@@ -64,7 +64,6 @@ def authenticate():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        print(email, password)
 
         # Check user credentials in the employee table
         cursor.execute(
@@ -143,10 +142,8 @@ def user():
 @app.route('/profile_emp')
 def profile_emp():
     user_data = request.args.get('user')
-    print(user_data)
     cursor.execute('SELECT * FROM employee WHERE emp_id=%s', (user_data,))
     data = cursor.fetchall()
-    print(data)
     return render_template('profile_emp.html', user_data=data[0])
 
 
@@ -154,10 +151,8 @@ def profile_emp():
 @app.route('/profile_usr')
 def profile_usr():
     user_data = request.args.get('user')
-    print(user_data)
     cursor.execute('SELECT * FROM user WHERE user_id=%s', (user_data,))
     data = cursor.fetchall()
-    print(data)
     return render_template('profile_usr.html', user_data=data[0])
 
 
@@ -174,7 +169,6 @@ def users_managed():
         'JOIN user d ON ed.user_id = d.user_id '
         'WHERE e.emp_id = %s', (emp_id,))  # Tables being joined: EMPLOYEE : EMP_USER : USER
     users_managed = cursor.fetchall()
-    print(users_managed)
     return render_template('users_managed.html', users_managed=users_managed)
 
 
@@ -213,11 +207,9 @@ def projects_managed():
 def dept_details():
     # Fetch department details from the database
     curr_emp_id = request.args.get('user')
-    print(curr_emp_id)
     cursor.execute('SELECT d.* FROM department d JOIN emp_dept ed ON d.dept_id = ed.dept_id WHERE ed.emp_id = %s',
                    (curr_emp_id,))  # Tables being joined: DEPARTMENT : EMP_DEPT
     dept_details = cursor.fetchall()
-    print(dept_details)
     return render_template('dept_details.html', dept_details=dept_details)
 
 
@@ -234,7 +226,6 @@ def download():
         # Tables being joined: GAME : GAME_AT_BRANCH : BRANCH
         games = cursor.fetchall()
         game_id = request.form.get('game_id')
-        print(game_id)
         subprocess.run(['git', 'clone', game_id])
         repo_name = game_id.split('/')[-1].split('.')[0]  # Extract Folder name
         os.startfile(f'{repo_name}')
@@ -264,7 +255,6 @@ def add_review():
         cursor.execute('SELECT game_id FROM game WHERE game_name=%s', (game_name,))
         game_id = cursor.fetchall()[0][0]
 
-        print(game_id)
         # Read review count from file
         review_count = 0
         with open('rev_count.txt', 'r') as f:
@@ -272,11 +262,11 @@ def add_review():
 
         # Generate review ID
         review_id = int(f'{review_count + 100}')
-        print(review_id)
         try:
             # Insert review into the database
-            cursor.execute('INSERT INTO review (rev_id, rating, comment, rev_date) VALUES (%s, %s, %s, %s)',
-                           (review_id, rating, comment, date.today().strftime('%Y-%m-%d')))
+            cursor.execute('INSERT INTO review (rev_id, rating, comment, rev_date, user_id) '
+                           'VALUES (%s, %s, %s, %s, %s)',
+                           (review_id, rating, comment, date.today().strftime('%Y-%m-%d'), user_id))
             # Update user_game and game_review tables
             cursor.execute('INSERT INTO user_game (user_id, game_id) VALUES (%s, %s)', (user_id, game_id))
             cursor.execute('INSERT INTO game_review (game_id, rev_id) VALUES (%s, %s)', (game_id, review_id))
@@ -294,14 +284,13 @@ def add_review():
 @app.route('/reviews_added')
 def reviews_added():
     user_id = request.args.get('user')
-    print(user_id)
     # Fetch all reviews added by the user from the database
     cursor.execute('SELECT r.rev_id, r.rating, r.comment, r.rev_date, g.game_name '
                    'FROM review r '
                    'JOIN game_review gr ON r.rev_id = gr.rev_id '
                    'JOIN user_game ug ON gr.game_id = ug.game_id '
                    'JOIN game g ON ug.game_id = g.game_id '
-                   'WHERE ug.user_id = %s', (user_id,))
+                   'WHERE ug.user_id = %s AND r.user_id = %s', (user_id, user_id))
     # Tables being joined: REVIEW : GAME_REVIEW : USER_GAME : GAME
     reviews = cursor.fetchall()
     return render_template('reviews_added.html', reviews=reviews)
@@ -323,7 +312,6 @@ def edit_user():
                        (new_name, new_email, password, user_id))
         conn.commit()
 
-        print(user_id)
         cursor.execute(
             'SELECT e.emp_id '
             'FROM employee e '
@@ -331,15 +319,12 @@ def edit_user():
             'JOIN user d ON ed.user_id = d.user_id '
             'WHERE d.user_id = %s', (user_id,))
         emp_id = cursor.fetchall()[0][0]
-        print(emp_id)
         return redirect(f'/users_managed?user={emp_id}')
 
     # Handle GET request to display edit form
     user_id = request.args.get('username')
-    print(user_id)
     cursor.execute('SELECT * FROM user WHERE user_id = %s', (user_id,))
     user_details = cursor.fetchall()[0]
-    print(user_details)
     return render_template('edit_user.html', user_data=user_details)
 
 
@@ -348,7 +333,6 @@ def edit_employee():
     if request.method == 'POST':
         # Process form submission to edit employee
         emp_id = request.form['emp_id']
-        print(emp_id)
         new_name = request.form['name']
         new_email = request.form['email']
         # Update employee in the database using emp_id
@@ -362,7 +346,6 @@ def edit_employee():
             'JOIN department d ON ed.dept_id = d.dept_id '
             'WHERE e.emp_id = %s', (emp_id,))
         emp_id = cursor.fetchall()[0][0]
-        print(emp_id)
         return redirect(f'/employees_managed?user={emp_id}')
 
     # Handle GET request to display edit form
@@ -418,7 +401,6 @@ def add_employee():
             'WHERE e.emp_id = %s', (emp_id,))
         # Tables being joined: EMPLOYEE : EMP_DEPT : DEPARTMENT
         emp_id = cursor.fetchall()[0][0]
-        print(emp_id)
         return redirect(f'/employees_managed?user={emp_id}')
 
     # Fetch department names for dropdown menu
@@ -462,7 +444,6 @@ def add_project():
         start_date = request.form['start_date']
         duration = request.form['durn']
         emp_id = request.form['emp_id']
-        print(emp_id)
         # Insert project details into the database
         cursor.execute(
             'INSERT INTO project (proj_id,  proj_name, proj_status) VALUES (%s, %s, %s)',
